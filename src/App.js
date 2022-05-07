@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddButton from "./components/AddButton";
 import TaskForm from "./components/TaskForm";
 import Task from "./components/Task";
@@ -11,6 +11,18 @@ function App() {
   const [showCompleteTasks, setShowCompleteTasks] = useState(false);
   //const [tasks, setTasks] = useState(arrayTasks);
   const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    const getLocalStorage = () => {
+      const tasksLS = JSON.parse(localStorage.getItem("tasks")) || [];
+      setTasks(tasksLS);
+    };
+    getLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleCompleteTaskToogle = (id) => {
     const i = tasks.findIndex((item) => item.id === id);
@@ -32,6 +44,7 @@ function App() {
       <header className="header">
         <img className="header__logo" src={logo} alt="todoisnt logo" />
       </header>
+
       <div className="main-container">
         <h1 className="main-container__title">Todos</h1>
 
